@@ -2,6 +2,7 @@
 namespace DreamFactory\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use DreamFactory\Managed\Bootstrap\ManagedInstance;
 
 class Kernel extends HttpKernel
 {
@@ -45,4 +46,19 @@ class Kernel extends HttpKernel
 //        'guest' => \DreamFactory\Http\Middleware\RedirectIfAuthenticated::class,
 //        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];
+
+    /**
+     * Inject our bootstrapper into the mix
+     */
+    protected function bootstrappers()
+    {
+        $_stack = parent::bootstrappers();
+
+        //  Insert our guy
+        array_unshift($_stack, array_shift($_stack), ManagedInstance::class);
+
+        return $_stack;
+    }
+
+
 }
